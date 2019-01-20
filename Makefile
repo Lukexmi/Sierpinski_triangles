@@ -1,6 +1,6 @@
 OBJECTS = main.o
 CC = g++
-FLAGS = -w -lSDL2 -lGL -lGLU
+FLAGS = -std=c++98 -w -lSDL2 -lGL -lGLU
 EXEC = test
 
 all:

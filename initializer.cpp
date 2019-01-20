@@ -65,7 +65,7 @@ bool InitGL()
 
     glMatrixMode(GL_PROJECTION); // Set current matrix
     glLoadIdentity(); // Replace current matrix into identity matrix
-
+    gluOrtho2D( 0.0, 800.0, 600.0,0.0 );
     error = glGetError();
     if(error != GL_NO_ERROR)
     {
