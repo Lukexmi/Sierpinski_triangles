@@ -6,7 +6,7 @@ void EndProgram(SDL_Window** window)
     SDL_Quit();
 }
 
-bool Init(SDL_Window** window, SDL_GLContext context)
+bool Init(SDL_Window** window, SDL_GLContext context, Config config)
 {
     if( SDL_Init(SDL_INIT_EVERYTHING) < 0)
     {
@@ -26,7 +26,7 @@ bool Init(SDL_Window** window, SDL_GLContext context)
 
         //Create Window here:
         *window = SDL_CreateWindow("Sierpinski", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-        800,600,SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
+        config.SCREEN_WIDTH,config.SCREEN_HEIGHT,SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
 
         if(window == NULL)
         {
@@ -48,7 +48,7 @@ bool Init(SDL_Window** window, SDL_GLContext context)
                     std::cout << "Warning: Vsync is off: " << SDL_GetError() << std::endl;
                 }
 
-                if(!InitGL())
+                if(!InitGL(config.RENDER_MODE))
                 {
                     std::cout << "Unable to initialize OpenGL..." << SDL_GetError() << std::endl;
                     return false;
@@ -59,13 +59,23 @@ bool Init(SDL_Window** window, SDL_GLContext context)
     return true;
 }
 
-bool InitGL()
+bool InitGL(enum renderFlags flags)
 {
     GLenum error = GL_NO_ERROR;
 
     glMatrixMode(GL_PROJECTION); // Set current matrix
-    glLoadIdentity(); // Replace current matrix into identity matrix
-    gluOrtho2D( 0.0, 800.0, 600.0,0.0 );
+
+    if(flags == Recursive)
+    {
+        std::cout << "initgl recursive" << std::endl;
+        glLoadIdentity(); // Replace current matrix into identity matrix
+    }
+    if(flags == And)
+    {
+        std::cout << "initgl and" << std::endl;
+        gluOrtho2D( 0.0, 1024.0, 1024.0,0.0 );
+    }
+
     error = glGetError();
     if(error != GL_NO_ERROR)
     {

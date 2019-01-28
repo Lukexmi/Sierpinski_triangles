@@ -4,42 +4,55 @@
 //NOTE: used c++98
 #include "initializer.h"
 #include "renderer.h"
+#include "args.h"
 
 using namespace std;
 
-int main(void)
+int main(int argc, char** args)
 {
+    Config conf;
+
+    ParseParams(argc, args, &conf);
+    std::cout << conf.DONE << std::endl;
     SDL_Event exitEvent;
-    bool done = false;
     SDL_Window* window;
     SDL_GLContext context;
-    int steps = 6;
     // Main program flow here:
-    if(Init(&window, &context))
+    if(conf.DONE == false && Init(&window, &context, conf))
     {
         SDL_GL_SetSwapInterval(1);
         Vector2 vertices[3];
         GetInitialVertices(vertices);
-
-        std::cout << vertices[1].x << std::endl;
-
         ClearScreen();
-        //StartDrawing(window, vertices, steps);
-        //SDL_GL_SwapWindow(window);
-      //  DrawTriangle(vertices);
-        for(int y = 0; y < 600; y++)
+
+        if(conf.RENDER_MODE == Recursive)
         {
-            for(int x = 0; x < 800; x++)
+            std::cout << "Drawing recursively" << std::endl;
+            StartDrawing(window, vertices, conf.STEPS);
+        }
+        else if(conf.RENDER_MODE == And)
+        {
+            std::cout << "Drawing AND" << std::endl;
+            for(int y = 0; y < conf.SCREEN_WIDTH; y++)
             {
-                if(x&y) PutPixel({x,y});
+                for(int x = 0; x < conf.SCREEN_HEIGHT; x++)
+                {
+                    if(x&y)
+                    {
+                      glColor3f(0,0,0);
+                      PutPixel({x,y});
+                    }
+                    else{
+                      glColor3f(1,1,1);
+                      PutPixel({x,y});
+                    }
+                }
             }
         }
-        //PutPixel({100,100});
 
-        //DrawTriangle(vert1);
         SDL_GL_SwapWindow(window);
 
-        while(!done)
+        while(!conf.DONE)
         {
             while(SDL_PollEvent(&exitEvent))
             {
@@ -47,12 +60,12 @@ int main(void)
                 {
                     case SDL_KEYDOWN:
                         cout << "Process is done" << endl;
-                        done = true;
+                        conf.DONE = true;
                     break;
                 }
             }
         }
-    }else
+    }else if(conf.DONE == false)
     {
         std::cout << "Rendering could not be initialized" << std::endl;
     }

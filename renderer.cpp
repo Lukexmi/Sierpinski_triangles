@@ -25,9 +25,7 @@ void DrawLine(Vector2 p1, Vector2 p2)
 void PutPixel(Vector2 coordinates)
 {
   glPointSize(1);
-  std::cout << "Putting pixel at :" << coordinates.x << " " <<  coordinates.y << std::endl;
   glBegin(GL_POINTS);
-    glColor3f(1,1,1);
     glVertex2i((int)coordinates.x, (int)coordinates.y);
   glEnd();
 }
@@ -40,9 +38,6 @@ void StartDrawing(SDL_Window* window, struct Vector2 vertices[], int depth)
     SDL_GL_SwapWindow(window);
     SDL_Delay(1000);
 
-    /*DrawLine(vertices[0], vertices[1]);
-    DrawLine(vertices[0], vertices[2]);
-    DrawLine(vertices[1], vertices[2]);*/
     Vector2 temp[3];
 
     DrawTriangle(vertices);
@@ -55,11 +50,6 @@ void StartDrawing(SDL_Window* window, struct Vector2 vertices[], int depth)
 
     temp[2].x = (vertices[1].x + vertices[2].x) / 2;
     temp[2].y = (vertices[1].y + vertices[2].y) / 2;
-
-    //DrawTriangle(temp);
-    /*DrawLine(vertices[0], vertices[1]);
-    DrawLine(vertices[0], vertices[2]);
-    DrawLine(vertices[1], vertices[2]);*/
 
     DrawSubTriangle(window,1, depth, temp);
     std::cout << "DONE" << std::endl;
