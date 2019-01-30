@@ -9,6 +9,7 @@
 #include "stdio.h"
 #include <ctime>
 #include <math.h>
+#include "initializer.h"
 
 typedef struct Vector2
 {
@@ -24,14 +25,17 @@ typedef struct Vector3
 };
 
 void ClearScreen(); // Call glClear
-void DrawTriangle(struct Vector2 vertices[]); // Draw a triangle with specific vertice coordinates
 void DrawSubTriangle(SDL_Window* window, int n, int depth, Vector2 vertices[]);// Draw a sub triangle
-void StartDrawing(SDL_Window *window, struct Vector2 vertices[], int depth);
+void StartDrawing(SDL_Window *window, struct Vector2 vertices[], int depth); // Recursive method
+void AndDraw(SDL_Window *window, Config conf); // And Method drawing
+void RandomDraw(int pixels, SDL_Window* window, Config config);
+void GetInitialVertices(struct Vector2 *x);
 //These functions may go to another file
+void DrawTriangle(struct Vector2 vertices[]); // Draw a triangle with specific vertice coordinates
 void PutPixel(Vector2 coordinates);
 void DrawLine(Vector2 p1, Vector2 p2);
 Vector2 GetMidPoint(Vector2 p1, Vector2 p2); //Calculate midpoint
-void GetInitialVertices(struct Vector2 *x);
+
 
 
 #endif

@@ -13,7 +13,7 @@ int main(int argc, char** args)
     Config conf;
 
     ParseParams(argc, args, &conf);
-    std::cout << conf.DONE << std::endl;
+
     SDL_Event exitEvent;
     SDL_Window* window;
     SDL_GLContext context;
@@ -33,21 +33,12 @@ int main(int argc, char** args)
         else if(conf.RENDER_MODE == And)
         {
             std::cout << "Drawing AND" << std::endl;
-            for(int y = 0; y < conf.SCREEN_WIDTH; y++)
-            {
-                for(int x = 0; x < conf.SCREEN_HEIGHT; x++)
-                {
-                    if(x&y)
-                    {
-                      glColor3f(0,0,0);
-                      PutPixel({x,y});
-                    }
-                    else{
-                      glColor3f(1,1,1);
-                      PutPixel({x,y});
-                    }
-                }
-            }
+            AndDraw(window, conf);
+        }
+        else if(conf.RENDER_MODE == Random)
+        {
+            std::cout << "Drawing Random" << std::endl;
+            RandomDraw(100000, window, conf);
         }
 
         SDL_GL_SwapWindow(window);

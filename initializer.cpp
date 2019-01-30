@@ -48,7 +48,7 @@ bool Init(SDL_Window** window, SDL_GLContext context, Config config)
                     std::cout << "Warning: Vsync is off: " << SDL_GetError() << std::endl;
                 }
 
-                if(!InitGL(config.RENDER_MODE))
+                if(!InitGL(config))
                 {
                     std::cout << "Unable to initialize OpenGL..." << SDL_GetError() << std::endl;
                     return false;
@@ -59,21 +59,19 @@ bool Init(SDL_Window** window, SDL_GLContext context, Config config)
     return true;
 }
 
-bool InitGL(enum renderFlags flags)
+bool InitGL(Config config)
 {
     GLenum error = GL_NO_ERROR;
-
+    renderFlags flags = config.RENDER_MODE;
     glMatrixMode(GL_PROJECTION); // Set current matrix
 
     if(flags == Recursive)
     {
-        std::cout << "initgl recursive" << std::endl;
         glLoadIdentity(); // Replace current matrix into identity matrix
     }
-    if(flags == And)
+    if(flags == And || flags == Random)
     {
-        std::cout << "initgl and" << std::endl;
-        gluOrtho2D( 0.0, 1024.0, 1024.0,0.0 );
+        gluOrtho2D( 0.0, config.SCREEN_WIDTH, config.SCREEN_HEIGHT,0.0 );
     }
 
     error = glGetError();
