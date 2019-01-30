@@ -1,4 +1,6 @@
 #include "renderer.h"
+#include <stdlib.h>
+#include <time.h>
 
 void ClearScreen()
 {
@@ -28,6 +30,61 @@ void PutPixel(Vector2 coordinates)
   glBegin(GL_POINTS);
     glVertex2i((int)coordinates.x, (int)coordinates.y);
   glEnd();
+}
+
+void AndDraw(SDL_Window *window, Config conf)
+{
+    for(int y = 0; y < conf.SCREEN_WIDTH; y++)
+    {
+        for(int x = 0; x < conf.SCREEN_HEIGHT; x++)
+        {
+            if(x&y)
+            {
+              glColor3f(0,0,0);
+              PutPixel({x,y});
+            }
+            else{
+              glColor3f(1,1,1);
+              PutPixel({x,y});
+            }
+        }
+
+        SDL_Delay(1000);
+        SDL_GL_SwapWindow(window);
+    }
+}
+
+void RandomDraw(int pixels, SDL_Window *window, Config config)
+{
+    Vector2 vertices[3];
+    vertices[0].x = 10;
+    vertices[0].y = config.SCREEN_HEIGHT - 10;
+    vertices[1].x = config.SCREEN_WIDTH - 10;
+    vertices[1].y = config.SCREEN_HEIGHT - 10;
+    vertices[2].x = config.SCREEN_WIDTH  / 2;
+    vertices[2].y = 10;
+
+    Vector2 px = {vertices[0].x, vertices[0].y};
+    for(int i = 0; i < pixels; i++)
+    {
+        glColor3f(1,0,0);
+        PutPixel({(int)px.x, (int)px.y});
+        switch(abs(rand() % 3))
+        {
+            case 0:
+              px.x = (px.x + vertices[0].x) / 2;
+              px.y = (px.y + vertices[0].y) / 2;
+            break;
+            case 1:
+              px.x = (px.x + vertices[1].x) / 2;
+              px.y = (px.y + vertices[1].y) / 2;
+            break;
+            case 2:
+              px.x = (px.x + vertices[2].x) / 2;
+              px.y = (px.y + vertices[2].y) / 2;
+            break;
+        }
+    }
 }
 
 void StartDrawing(SDL_Window* window, struct Vector2 vertices[], int depth)

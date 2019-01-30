@@ -11,8 +11,6 @@ bool CheckConfig(Config* conf);
 bool CheckData(int i, int argc);
 void DisplayHelp(Config *conf);
 
-
-
 bool ParseParams(int argc, char** argv, Config* conf)
 {
     conf->STEPS = 6;
@@ -90,7 +88,6 @@ bool ParseParams(int argc, char** argv, Config* conf)
 
     //  -h /? for help
     //  -i for iterations a.k.a steps (how deep fractal is drawn (in recursive))
-    //  -s for time between steps (in iterator, milliseconds)
     //  -d for screen dimensions (2 params, first width, then height)
     //  -m for rendering mode (0 for recursive, 1 for AND, 2 for random)
 
@@ -99,7 +96,12 @@ bool ParseParams(int argc, char** argv, Config* conf)
 
 void DisplayHelp(Config* conf)
 {
-    printf("Displaying help");
+    printf("Hello, this is Sierpinski triangle fractal drawing program\n");
+    printf("Here are the configuration keys:\n");
+    printf("-h /? => Display help and exit\n");
+    printf("-i => step count in recursive mode (Default 6)\n");
+    printf("-d => screen dimensions, write two integers separated by space(first is screen width, second is screen height)\n");
+    printf("-m => rendering mode (0 - draw triangles recursively, 1 - using & operator, 2 - using rand())\n");
 }
 
 bool CheckData(int i, int argc)
@@ -114,7 +116,8 @@ bool CheckConfig(Config* conf)
     {
       if(conf->STEPS == 0 || conf->SCREEN_WIDTH == 0 || conf->SCREEN_HEIGHT == 0 || conf->RENDER_MODE > 3)
       {
-          printf("Bad data");
+          printf("Bad data\n");
+          conf->DONE = true;
           return false;
       }
       else return true;
